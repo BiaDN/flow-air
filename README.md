@@ -2,52 +2,58 @@
 
 ```plaintext
 src/
-├── assets/                          
-│   ├── images/                      # Static images (AC units, status indicators)
-│   ├── icons/                       # Icons (power, fan, temperature, etc.)
-│   └── styles/                      # Global styles and variables
-│       ├── variables.scss           # Color schemes, spacing, fonts
-│       └── global.scss              # Global CSS resets and base styles
-├── components/                      
-│   ├── common/                      # Reusable common components
-│   │   ├── Button.jsx               # Reusable button with custom props
-│   │   ├── Input.jsx                # Input field component
-│   │   ├── Select.jsx               # Dropdown selector
-│   │   ├── Slider.jsx               # Temperature slider component
-│   │   ├── ToggleSwitch.jsx         # On/Off toggle component
-│   │   └── Icon.jsx                 # Displays status icons
-│   ├── layout/                      # Layout components
-│   │   ├── Header.jsx               # Top navigation bar
-│   │   ├── Sidebar.jsx              # Sidebar with equipment list
-│   │   └── Footer.jsx               # Footer section
-│   └── airConditionerControl/       # Air Conditioner specific components
-│       ├── AirConditionerCard.jsx   # Card for individual AC unit
-│       ├── TemperatureControl.jsx   # Temperature adjustment control
-│       ├── ModeSelector.jsx         # Select AC mode (cool, heat, etc.)
-│       ├── FanSpeedControl.jsx      # Control fan speed levels
-│       ├── TimerControl.jsx         # Manage timer settings
-│       └── StatusDisplay.jsx        # Display status information
-├── pages/                           
-│   ├── Dashboard.jsx                # Main dashboard page
+├── assets/                  # Images, fonts, icons
+│   ├── images/
+│   ├── icons/
+│   └── fonts/
+│
+├── components/              # Reusable UI components
+│   ├── common/              # Generic components like buttons, icons, sliders
+│   │   ├── Button.jsx
+│   │   ├── ToggleSwitch.jsx
+│   │   ├── Slider.jsx
+│   │   ├── Icon.jsx
+│   │   ├── Input.jsx
+│   │   └── Modal.jsx
+│   │
+│   ├── layout/              # Layout components like headers and footers
+│   │   ├── Header.jsx
+│   │   └── Footer.jsx
+│   │
+│   ├── airConditioner/      # Components related to AC control
+│   │   ├── AirConditionerCard.jsx
+│   │   ├── TemperatureControl.jsx
+│   │   ├── ModeSelector.jsx
+│   │   ├── FanSpeedControl.jsx
+│   │   ├── TimerControl.jsx
+│   │   └── ToggleSwitch.jsx
+│   │
+│   ├── sidebar/             # Sidebar components for the equipment list
+│   │   ├── EquipmentList.jsx
+│   │   └── EquipmentItem.jsx
+│   │
+│   ├── functionSetup/       # Control panel components
+│   │   ├── FunctionSetupOptions.jsx
+│   │   ├── FunctionSetupDescription.jsx
+│   │   └── FunctionSetupPanel.jsx
+│   │
+│   └── instruction/         # Instructional components
+│       └── InstructionCard.jsx
+│
+├── pages/                   # Page components
+│   ├── AirConditionerDashboard.jsx
 │   ├── Equipment.jsx                # Equipment configuration page
 │   ├── StateSetup.jsx               # Manage operational states
 │   ├── TimeSetup.jsx                # Scheduling page
 │   ├── Config.jsx                   # System configuration settings
 │   └── Logs.jsx                     # View logs and error reports
-├── services/                        
+│
+├── services/                # API services and utilities
 │   ├── api.js                       # Axios instance setup
 │   ├── AirConditionerService.js     # API calls for AC control
 │   ├── NotificationService.js       # Notification handling service
 │   └── ConfigService.js             # API calls for app configuration
-├── constants/                       
-│   ├── routes.js                    # Route paths
-│   ├── apiEndpoints.js              # API endpoint URLs
-│   ├── messages.js                  # Success and error messages
-│   └── appConfig.js                 # General application configuration
-├── hooks/                           
-│   ├── useAirConditioner.js         # Hook for managing AC data
-│   ├── useNotification.js           # Hook for notification system
-│   └── useFetch.js                  # Data fetching utility hook
+│
 ├── utils/                           
 │   ├── helpers.js                   # Utility functions
 │   ├── formatters.js                # Format data for UI display
@@ -55,15 +61,17 @@ src/
 ├── context/                         
 │   ├── AirConditionerContext.js     # AC data global state context
 │   └── NotificationContext.js       # Notification state context
-├── router/                          
-│   └── AppRouter.jsx                # Main routing configuration
 ├── i18n/                            
 │   ├── index.js                     # Internationalization setup
 │   ├── en.json                      # English translations
-│   └── vi.json                      # Vietnamese translations
-├── App.jsx                          # Root component
-├── main.jsx                         # Main app entry point
-└── index.css                        # Global styles
+│   └── ko.json                      # Korean translations
+│
+├── constants/               # Static constants
+│   └── airConditionerModes.js
+│
+└── App.jsx                  # Main React component
+└── index.js                 # Entry point
+
 ```
 
 ---
@@ -72,11 +80,12 @@ src/
 
 ### 1. **Dashboard Page Component**
 ```jsx
-Dashboard {
-    Header                          // Top navigation
-    Sidebar                         // Equipment list navigation
-    AirConditionerCard (multiple)   // Display multiple AC units
-    Footer                          // Footer with system info
+AirConditionerDashboard {
+    Header
+    Sidebar (EquipmentList)
+    FunctionSetupPanel
+    AirConditionerCard (repeatable for multiple AC units)
+    Footer
 }
 ```
 
@@ -85,12 +94,13 @@ Dashboard {
 
 ```jsx
 AirConditionerCard {
-    StatusDisplay                   // Current status (on/off, temperature)
-    TemperatureControl              // Component to adjust temperature
-    ModeSelector                    // Select operation mode (cool, heat, etc.)
-    FanSpeedControl                 // Adjust fan speed
-    TimerControl                    // Set timer for operations
-    ToggleSwitch                    // Toggle AC on or off
+    Icon (AC status)
+    TemperatureControl
+    ModeSelector
+    FanSpeedControl
+    TimerControl
+    ToggleSwitch (on/off)
+    Input
 }
 ```
 
@@ -105,48 +115,50 @@ TemperatureControl {
 }
 ```
 
-### 4. **ModeSelector Component**
-> Dropdown for selecting AC modes.
+### 4. **FunctionSetupPanel Component**
+> Main control panel for setting modes, temperatures, and timers.
 
 ```jsx
-ModeSelector {
-    Select (options: ["Cool", "Heat", "Fan", "Auto"])   // Mode selection
+FunctionSetupPanel {
+    FunctionSetupOptions(type, hasLabel) : repeatable for each option
+    InstructionCard()
+    FunctionSetupDescription(Icon, Text): repeatable twice
 }
 ```
 
-### 5. **FanSpeedControl Component**
-> Allows users to select different fan speed levels.
+### 5. **InstructionCard Component**
+> Container wrap FunctionSetupDescription
 
 ```jsx
-FanSpeedControl {
-    Button (Low)                                        // Set fan to low
-    Button (Medium)                                     // Set fan to medium
-    Button (High)                                       // Set fan to high
+InstructionCard {
+    FunctionSetupDescription(Icon, Text): repeatable twice
 }
 ```
 
-### 6. **TimerControl Component**
-> Setup and manage timers for AC operations.
+### 6. **FunctionSetupOptions Component**
+> Base on type , hasLabel props to coding exactly. Ex: Douple Button, Button + Dropdown
 
 ```jsx
-TimerControl {
-    Input (startTime)                                   // Set start time
-    Input (endTime)                                     // Set end time
-    Button (Save Timer)                                 // Save timer settings
+FunctionSetupOptions {
+    Button (ON)
+    Button (OFF)
+    Button (Timer ON)
+    Button (Timer OFF)
+    Dropdown (Temperature selector)
+    Button (Timer)
+    Button (Filter)
+    Button (Reset)
 }
 ```
 
-### 7. **StatusDisplay Component**
-> Display real-time status of the air conditioner.
+### 7. **FunctionSetupDescription Component**
+> Description about function setup below page
 
 ```jsx
-StatusDisplay {
-    Icon (status)                                       // Display on/off status icon
-    Text (temperature)                                  // Show current temperature
+FunctionSetupDescription {
+    Icon
+    Text (Title)
+    Text (Subtitle)
+    Image
 }
 ```
-
----
-
-This structure and pseudocode ensure clarity in how each component interacts while maintaining a clean and scalable architecture. If you need more details for any specific component logic, let me know! 🚀
-
