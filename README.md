@@ -122,7 +122,6 @@ TemperatureControl {
 FunctionSetupPanel {
     FunctionSetupOptions(type, hasLabel) : repeatable for each option
     InstructionCard()
-    FunctionSetupDescription(Icon, Text): repeatable twice
 }
 ```
 
@@ -131,7 +130,7 @@ FunctionSetupPanel {
 
 ```jsx
 InstructionCard {
-    FunctionSetupDescription(Icon, Text): repeatable twice
+    FunctionSetupDescription(Icon, Text): repeat twice
 }
 ```
 
@@ -148,11 +147,12 @@ FunctionSetupOptions {
     Button (Timer)
     Button (Filter)
     Button (Reset)
+    Text (Title)
 }
 ```
 
 ### 7. **FunctionSetupDescription Component**
-> Description about function setup below page
+> Includes information for detail description
 
 ```jsx
 FunctionSetupDescription {
